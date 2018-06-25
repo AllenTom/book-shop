@@ -4,6 +4,7 @@ package database.models;
 import Util.DBUtil;
 import Util.SqlUtil;
 import database.handlers.CategoryModelHandler;
+import database.handlers.CategorySingleModelHandler;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.locale.converters.DateLocaleConverter;
 
@@ -74,9 +75,9 @@ public class Category extends Model implements Serializable {
         return DBUtil.exceQueryMultiple(new CategoryModelHandler(), Category.class, sql);
     }
 
-    public static Category queryById(){
+    public static Category queryById(int id) throws SQLException {
         String sql = "SELECT * FROM  category WHERE id = ?";
-        return DBUtil.exceQuery(new CategoryModelHandler(),Category.class,new CategoryModelHandler(), Category.class, sql);
+        return DBUtil.exceQuery(new CategorySingleModelHandler(),Category.class, sql, id);
     }
 
     public Category(String categoryName) {
@@ -86,4 +87,6 @@ public class Category extends Model implements Serializable {
     public Category() {
 
     }
+
+
 }

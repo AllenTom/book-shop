@@ -19,7 +19,7 @@ public class ConnectionPool {
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
-        dataSource.setJdbcUrl("jdbc:mysql://localhost/book");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost/book?useSSL=false&&serverTimezone=Hongkong");
         dataSource.setUser("root");
         dataSource.setPassword("dzh17217");
 

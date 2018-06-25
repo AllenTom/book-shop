@@ -26,7 +26,7 @@ public class DBUtil {
      * @return type of T model
      * @throws SQLException
      */
-    public static <T extends Model> T exceQuery(BeanHandler processor,Class<T> tClass, String sql, Object... objects) throws SQLException {
+    public static <T> T exceQuery(BeanHandler processor,Class<T> tClass, String sql, Object... objects) throws SQLException {
         Connection conn = ConnectionPool.getInstance().dataSource.getConnection();
         QueryRunner queryRunner = new QueryRunner();
         if (processor == null){
@@ -45,7 +45,7 @@ public class DBUtil {
      * @return type of T model
      * @throws SQLException
      */
-    public static <T extends Model> List<T> exceQueryMultiple(BeanListHandler processor,Class<T> tClass, String sql, Object... objects) throws SQLException {
+    public static <T> List<T> exceQueryMultiple(BeanListHandler processor,Class<T> tClass, String sql, Object... objects) throws SQLException {
         Connection conn = ConnectionPool.getInstance().dataSource.getConnection();
         QueryRunner queryRunner = new QueryRunner();
         if (processor == null){
@@ -57,7 +57,7 @@ public class DBUtil {
     }
 
 
-    public static <T extends Model> T exceInsert(Class<T> tClass, String sql, Object... objects) throws SQLException {
+    public static <T> T exceInsert(Class<T> tClass, String sql, Object... objects) throws SQLException {
         Connection conn = ConnectionPool.getInstance().dataSource.getConnection();
         QueryRunner queryRunner = new QueryRunner();
         T result = queryRunner.insert(conn, sql, new BeanHandler<>(tClass), objects);

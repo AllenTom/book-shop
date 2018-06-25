@@ -63,22 +63,40 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">创建分类</h4>
-                            <h6 class="card-subtitle">创建新的分类</h6>
-                            <form class="form-horizontal p-t-20" action="/admin/category/create" method="post">
+                            <h4 class="card-title">创建书籍</h4>
+                            <h6 class="card-subtitle">创建新的书籍</h6>
+                            <form class="form-horizontal p-t-20" action="/admin/book/create" method="post">
                                 <div class="form-group row">
-                                    <label for="category-name" class="col-sm-3 control-label">分类名</label>
+                                    <label for="book-name" class="col-sm-3 control-label">书名</label>
                                     <div class="col-sm-9">
                                         <div class="input-group">
-                                            <input type="text" name="categoryName" class="form-control"
-                                                   id="category-name" placeholder="分类名">
+                                            <input type="text" name="name" class="form-control"
+                                                   id="book-name" placeholder="书名">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="book-prices" class="col-sm-3 control-label">价格</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            <input type="text" name="prices" class="form-control"
+                                                   id="book-prices" placeholder="价格">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="book-count" class="col-sm-3 control-label">库存</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            <input type="text" name="count" class="form-control"
+                                                   id="book-count" placeholder="库存">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row m-b-0">
                                     <div class="offset-sm-3 col-sm-9">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light">创建分类
-                                        </button>
+                                        <button type="submit" class="btn btn-info waves-effect waves-light">创建书籍
+                                    </button>
                                     </div>
                                 </div>
                             </form>

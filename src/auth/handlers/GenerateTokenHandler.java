@@ -5,6 +5,8 @@ import common.WebConfig;
 import database.models.Token;
 import database.models.User;
 import middlewares.Middleware;
+import services.user.UserService;
+import services.user.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -30,23 +32,16 @@ public class GenerateTokenHandler extends RequestHandler {
         String username = requestContext.getRequest().getParameter("username");
         String password = requestContext.getRequest().getParameter("password");
         String redirectURL = requestContext.getRequest().getParameter("redirect-path");
-        try {
-            User user = User.findWithUsernamePassword(username, password);
-            if (user != null) {
-                Token token = Token.createToken(user.getId());
-                token.save();
+        UserService service = new UserServiceImpl();
+        Token token = service.login(username, password);
 
-                // add cookie to response
-                Cookie tokenCookie = new Cookie("token", token.getTokenKey());
-                tokenCookie.setPath("/");
-                tokenCookie.setMaxAge(WebConfig.TOKEN_EXPIRE);
-                requestContext.getResponse().addCookie(tokenCookie);
+        // add cookie to response
+        Cookie tokenCookie = new Cookie("token", token.getTokenKey());
+        tokenCookie.setPath("/");
+        tokenCookie.setMaxAge(WebConfig.TOKEN_EXPIRE);
+        requestContext.getResponse().addCookie(tokenCookie);
 
-                requestContext.getResponse().sendRedirect(redirectURL);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return;
-        }
+        requestContext.getResponse().sendRedirect(redirectURL);
+
     }
 }

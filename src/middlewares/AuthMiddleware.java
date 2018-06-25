@@ -29,7 +29,10 @@ public class AuthMiddleware implements Middleware {
     }
 
     private String readAuthToken(Cookie[] cookies) {
-        for (Cookie cookie: cookies) {
+        if (cookies == null) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
             if ("token".equals(cookie.getName())) {
                 return cookie.getValue();
             }

@@ -3,7 +3,6 @@ package database.handlers;
 import database.models.Category;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.BeanProcessor;
-import org.apache.commons.dbutils.RowProcessor;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import java.util.HashMap;

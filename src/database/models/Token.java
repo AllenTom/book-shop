@@ -54,6 +54,6 @@ public class Token extends Model {
 
     public static User readUserFromKey(String tokenKey) throws SQLException {
         String sql = "SELECT user.* FROM user INNER JOIN token ON user.id = token.user_id where token.token_key = ? limit 1";
-        return DBUtil.exceQuery(User.class,sql,tokenKey);
+        return DBUtil.exceQuery(null,User.class,sql,tokenKey);
     }
 }

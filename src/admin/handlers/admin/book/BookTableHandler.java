@@ -1,13 +1,17 @@
-package admin.handlers.admin.category;
+package admin.handlers.admin.book;
 
 import admin.view.Breadcrumb;
 import admin.view.contexts.AdminContext;
+import admin.view.contexts.AdminTableContext;
 import common.RequestHandler;
 import common.ViewInjector;
+import database.models.Book;
 import database.models.Category;
 import database.models.User;
 import middlewares.AuthMiddleware;
 import middlewares.Middleware;
+import services.book.BookService;
+import services.book.BookServiceImpl;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -15,8 +19,9 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-public class CategoryModifyHandler extends RequestHandler {
+public class BookTableHandler extends RequestHandler {
     private Middleware[] middlewares = {new AuthMiddleware()};
+
 
 
     @Override
@@ -31,22 +36,28 @@ public class CategoryModifyHandler extends RequestHandler {
             requestContext.getResponse().sendRedirect("/admin/login");
             return;
         }
-
-        // query
-        String categoryId = requestContext.getRequest().getParameter("cid");
-        int cid = Integer.parseInt(categoryId);
         List<Breadcrumb> breadcrumbList = Arrays.asList(
                 new Breadcrumb("设置", "/admin/dashboard"),
-                new Breadcrumb("分类", "/admin/dashboard"),
-                new Breadcrumb("添加分类", "/admin/dashboard")
+                new Breadcrumb("书籍", "/admin/dashboard")
         );
-        AdminContext adminContext = new AdminContext(breadcrumbList, "分类");
         ViewInjector injector = new ViewInjector(
-                "/admin/category/category-add.jsp",
+                "/template/admin/book/book-table.jsp",
                 requestContext.getRequest(),
-                requestContext.getResponse(),
-                adminContext
+                requestContext.getResponse()
+
         );
+        AdminContext adminContext = new AdminContext(breadcrumbList, "书籍");
+        injector.addContextProvider(adminContext);
+        //set category data
+
+        try {
+            BookService service = new BookServiceImpl();
+            AdminTableContext<Book> tableContext = new AdminTableContext<>(service.findAll());
+            injector.addContextProvider(tableContext);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         injector.renderTemplate();
 
     }
@@ -58,15 +69,8 @@ public class CategoryModifyHandler extends RequestHandler {
             requestContext.getResponse().sendRedirect("/admin/login");
             return;
         }
+        Book book = new Book();
 
-        String categoryName = requestContext.getRequest().getParameter("category-name");
-        Category category = new Category(categoryName);
-        try {
-            category.save();
-            requestContext.getResponse().sendRedirect("/admin/category/table");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
 
     }

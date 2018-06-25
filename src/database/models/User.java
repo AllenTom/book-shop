@@ -43,7 +43,7 @@ public class User extends Model {
 
     public static User findWithUsernamePassword(String username, String password) throws SQLException {
         String sql = "select * from book.user where username = ? and  password = ?";
-        return DBUtil.exceQuery(User.class, sql, username, password);
+        return DBUtil.exceQuery(null,User.class, sql, username, password);
     }
 
     public void changePassword(String newPassword) throws SQLException {

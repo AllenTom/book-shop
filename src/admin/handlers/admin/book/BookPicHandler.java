@@ -1,4 +1,4 @@
-package admin.handlers.admin.category;
+package admin.handlers.admin.book;
 
 import admin.view.Breadcrumb;
 import admin.view.contexts.AdminContext;
@@ -13,12 +13,16 @@ import middlewares.AuthMiddleware;
 import middlewares.Middleware;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Part;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-public class CategoryAddHandler extends RequestHandler {
+public class BookPicHandler extends RequestHandler {
     private Middleware[] middlewares = {new AuthMiddleware()};
 
 
@@ -28,7 +32,7 @@ public class CategoryAddHandler extends RequestHandler {
     }
 
     @Override
-    public void onGetRequest(RequestHandler.RequestContext requestContext) throws ServletException, IOException {
+    public void onGetRequest(RequestContext requestContext) throws ServletException, IOException {
         User user = (User) requestContext.getMeta().get("user");
         if (user == null) {
             requestContext.getResponse().sendRedirect("/admin/login");
@@ -36,12 +40,12 @@ public class CategoryAddHandler extends RequestHandler {
         }
         List<Breadcrumb> breadcrumbList = Arrays.asList(
                 new Breadcrumb("设置", "/admin/dashboard"),
-                new Breadcrumb("分类", "/admin/dashboard"),
-                new Breadcrumb("添加分类", "/admin/dashboard")
+                new Breadcrumb("书籍", "/admin/dashboard"),
+                new Breadcrumb("添加书籍封面", "/admin/dashboard")
         );
-        AdminContext adminContext = new AdminContext(breadcrumbList, "分类");
+        AdminContext adminContext = new AdminContext(breadcrumbList, "书籍");
         ViewInjector injector = new ViewInjector(
-                "/template/admin/category/category-create.jsp",
+                "/template/admin/book/book-add-pic.jsp",
                 requestContext.getRequest(),
                 requestContext.getResponse(),
                 adminContext
@@ -51,28 +55,18 @@ public class CategoryAddHandler extends RequestHandler {
     }
 
     @Override
-    public void onPostRequest(RequestHandler.RequestContext requestContext) throws ServletException, IOException {
+    public void onPostRequest(RequestContext requestContext) throws ServletException, IOException {
         User user = (User) requestContext.getMeta().get("user");
         if (user == null) {
             requestContext.getResponse().sendRedirect("/admin/login");
             return;
         }
+        Collection<Part> parts = requestContext.getRequest().getParts();
+        Part filePart = requestContext.getRequest().getPart("cover"); // Retrieves <input type="file" name="file">
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+        InputStream fileContent = filePart.getInputStream();
+        filePart.write("test.jpg");
 
-        String categoryName = requestContext.getRequest().getParameter("categoryName");
-        FormView form = new CreateCategoryForm();
-        Category category = new Category();
-        try {
-            FormViewUtil.bindFormToBean(category, requestContext.getRequest(), form, null);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            category.save();
-            requestContext.getResponse().sendRedirect("/admin/category/table");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
 
     }
